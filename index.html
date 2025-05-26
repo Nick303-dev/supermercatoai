@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Supermercato</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #4CAF50;
+      color: white;
+      border-radius: 5px;
+    }
+
+    .controls {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 5px;
+    }
+
+    .controls input, .controls select, .controls button {
+      margin: 5px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+    }
+
+    .controls button {
+      background: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    .controls button:hover {
+      background: #45a049;
+    }
+
+    .main-content {
+      display: flex;
+      gap: 20px;
+    }
+
+    .products-section {
+      flex: 2;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .cart-section {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .section-header {
+      background: #333;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+      padding: 15px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .product-card {
+      border: 2px solid #eee;
+      padding: 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      background: white;
+    }
+
+    .product-card:hover {
+      border-color: #4CAF50;
+    }
+
+    .product-card.selected {
+      border-color: #4CAF50;
+      background: #f0f8f0;
+    }
+
+    .product-code {
+      background: #4CAF50;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 12px;
+      display: inline-block;
+      margin-bottom: 5px;
+    }
+
+    .product-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .product-price {
+      font-size: 18px;
+      color: #4CAF50;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .product-type {
+      background: #e3f2fd;
+      color: #1976d2;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 12px;
+      display: inline-block;
+    }
+
+    .cart-items {
+      padding: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-item-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity-input-cart {
+      width: 50px;
+      text-align: center;
+      padding: 4px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+    }
+
+    .btn-small {
+      padding: 4px 8px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .cart-controls {
+      padding: 15px;
+      border-top: 1px solid #eee;
+    }
+
+    .quantity-control {
+      margin-bottom: 10px;
+    }
+
+    .quantity-control input {
+      width: 50px;
+      text-align: center;
+    }
+
+    .remove-btn {
+      background: #f44336;
+      color: white;
+    }
+
+    .remove-btn:hover {
+      background: #d32f2f;
+    }
+
+    .remove-all-btn {
+      background: #ff9800;
+      color: white;
+    }
+
+    .remove-all-btn:hover {
+      background: #f57c00;
+    }
+
+    .total-section {
+      background: #4CAF50;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+
+    .total-amount {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .receipt-section {
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      display: none;
+    }
+
+    .receipt-content {
+      padding: 15px;
+      font-family: monospace;
+      background: #f9f9f9;
+      white-space: pre-wrap;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        flex-direction: column;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Sistema Supermercato</h1>
+    <p>Gestisci i tuoi prodotti e il carrello della spesa</p>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Cerca prodotti...">
+    <select id="categoryFilter">
+      <option value="all">Tutte le categorie</option>
+      <option value="alimentari">Alimentari</option>
+      <option value="abbigliamento">Abbigliamento</option>
+    </select>
+    <button onclick="loadSampleData()">Carica Prodotti</button>
+  </div>
+
+  <div class="main-content">
+    <div class="products-section">
+      <div class="section-header">Prodotti Disponibili</div>
+      <div class="products-grid" id="productsGrid">
+        <div class="empty-state">
+          <p>Clicca su "Carica Prodotti" per iniziare</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-section">
+      <div class="section-header">Carrello (<span id="cartCount">0</span>)</div>
+      <div class="cart-items" id="cartItems">
+        <div class="empty-state">
+          <p>Il carrello è vuoto</p>
+        </div>
+      </div>
+      <div class="cart-controls">
+        <div class="quantity-control">
+          <label>Quantità:</label>
+          <input type="number" id="quantityInput" value="1" min="1">
+          <button onclick="addSelectedToCart()">Aggiungi</button>
+        </div>
+        <button onclick="clearCart()" style="width: 100%; background: #f44336; color: white; padding: 8px; border: none; border-radius: 3px; cursor: pointer;">Svuota Carrello</button>
+      </div>
+      <div class="total-section">
+        <div class="total-amount" id="totalAmount">€0.00</div>
+        <button onclick="generateReceipt()" style="background: white; color: #4CAF50; border: 2px solid white; padding: 8px 16px; border-radius: 3px; cursor: pointer;">
+          Genera Scontrino
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="receipt-section" id="receiptSection">
+    <div class="section-header">Scontrino</div>
+    <div class="receipt-content" id="receiptContent"></div>
+  </div>
+</div>
+
+<script>
+  var products = [];
+  var cart = [];
+  var selectedProduct = null;
+
+  function loadSampleData() {
+    products = [
+      { codice: 1, descrizione: "Mele Fuji", prezzo: 0.35, tipo: "fresco", categoria: "alimentari", calorie: 200 },
+      { codice: 2, descrizione: "Latte Intero 1L", prezzo: 1.20, tipo: "fresco", categoria: "alimentari", calorie: 200 },
+      { codice: 3, descrizione: "Petto di Pollo 500g", prezzo: 5.90, tipo: "fresco", categoria: "alimentari", calorie: 200 },
+      { codice: 4, descrizione: "Mozzarella 125g", prezzo: 1.30, tipo: "fresco", categoria: "alimentari", calorie: 200 },
+      { codice: 5, descrizione: "Pane Integrale 500g", prezzo: 1.80, tipo: "fresco", categoria: "alimentari", calorie: 200 },
+      { codice: 9, descrizione: "Tonno in Scatola 80g", prezzo: 1.10, tipo: "conservato", categoria: "alimentari", calorie: 200 },
+      { codice: 10, descrizione: "Pasta Penne 500g", prezzo: 1.30, tipo: "conservato", categoria: "alimentari", calorie: 200 },
+      { codice: 11, descrizione: "Passata Pomodoro 700g", prezzo: 1.50, tipo: "conservato", categoria: "alimentari", calorie: 200 },
+      { codice: 12, descrizione: "Riso Basmati 1kg", prezzo: 3.20, tipo: "conservato", categoria: "alimentari", calorie: 200 },
+      { codice: 16, descrizione: "Maglietta Cotone Bianca", prezzo: 9.99, tipo: "donna", categoria: "abbigliamento" },
+      { codice: 17, descrizione: "Jeans Skinny Blu", prezzo: 29.90, tipo: "donna", categoria: "abbigliamento" },
+      { codice: 18, descrizione: "Giacca Elegante Nera", prezzo: 59.90, tipo: "donna", categoria: "abbigliamento" },
+      { codice: 19, descrizione: "Vestito Estivo Floreale", prezzo: 39.99, tipo: "donna", categoria: "abbigliamento" },
+      { codice: 21, descrizione: "Felpa con Cappuccio", prezzo: 19.99, tipo: "uomo", categoria: "abbigliamento" },
+      { codice: 22, descrizione: "Pantaloni Sportivi", prezzo: 24.90, tipo: "uomo", categoria: "abbigliamento" },
+      { codice: 23, descrizione: "Camicia a Righe", prezzo: 34.90, tipo: "uomo", categoria: "abbigliamento" },
+      { codice: 24, descrizione: "Giacca in Pelle", prezzo: 99.90, tipo: "uomo", categoria: "abbigliamento" }
+    ];
+
+    displayProducts();
+  }
+
+  function calculatePrice(product) {
+    if (product.tipo === 'fresco') {
+      return product.prezzo + 0.02;
+    } else if (product.tipo === 'conservato') {
+      return product.prezzo;
+    } else if (product.tipo === 'donna') {
+      return product.prezzo * 0.6;
+    } else if (product.tipo === 'uomo') {
+      return product.prezzo * 0.8;
+    } else {
+      return product.prezzo;
+    }
+  }
+
+  function displayProducts(filteredProducts) {
+    var productsToShow = filteredProducts || products;
+    var grid = document.getElementById('productsGrid');
+
+    if (productsToShow.length === 0) {
+      grid.innerHTML = '<div class="empty-state"><p>Nessun prodotto trovato</p></div>';
+      return;
+    }
+
+    var html = '';
+    for (var i = 0; i < productsToShow.length; i++) {
+      var product = productsToShow[i];
+      var calculatedPrice = calculatePrice(product);
+
+      html += '<div class="product-card" onclick="selectProduct(' + product.codice + ')" data-id="' + product.codice + '">';
+      html += '<div class="product-code">#' + product.codice + '</div>';
+      html += '<div class="product-name">' + product.descrizione + '</div>';
+      html += '<div class="product-price">€' + calculatedPrice.toFixed(2) + '</div>';
+      html += '<div class="product-type">' + product.tipo + '</div>';
+      if (product.calorie) {
+        html += '<div class="product-calories">' + product.calorie + ' kcal</div>';
+      }
+      html += '</div>';
+    }
+
+    grid.innerHTML = html;
+  }
+
+  function selectProduct(codice) {
+    var cards = document.querySelectorAll('.product-card');
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].classList.remove('selected');
+    }
+
+    var card = document.querySelector('[data-id="' + codice + '"]');
+    card.classList.add('selected');
+
+    for (var i = 0; i < products.length; i++) {
+      if (products[i].codice === codice) {
+        selectedProduct = products[i];
+        break;
+      }
+    }
+
+    // Aggiungi automaticamente al carrello
+    addToCart(selectedProduct, 1);
+  }
+
+  function addSelectedToCart() {
+    if (!selectedProduct) {
+      alert('Seleziona prima un prodotto!');
+      return;
+    }
+
+    var quantity = parseInt(document.getElementById('quantityInput').value);
+    addToCart(selectedProduct, quantity);
+  }
+
+  function addToCart(product, quantity) {
+    for (var i = 0; i < quantity; i++) {
+      var productCopy = {
+        codice: product.codice,
+        descrizione: product.descrizione,
+        prezzo: product.prezzo,
+        tipo: product.tipo,
+        categoria: product.categoria,
+        calorie: product.calorie
+      };
+      cart.push(productCopy);
+    }
+
+    updateCartDisplay();
+    updateTotal();
+  }
+
+  function updateCartDisplay() {
+    var cartItems = document.getElementById('cartItems');
+    var cartCount = document.getElementById('cartCount');
+
+    cartCount.textContent = cart.length;
+
+    if (cart.length === 0) {
+      cartItems.innerHTML = '<div class="empty-state"><p>Il carrello è vuoto</p></div>';
+      return;
+    }
+
+    var groupedItems = {};
+    for (var i = 0; i < cart.length; i++) {
+      var item = cart[i];
+      if (groupedItems[item.codice]) {
+        groupedItems[item.codice].quantity++;
+      } else {
+        groupedItems[item.codice] = {
+          codice: item.codice,
+          descrizione: item.descrizione,
+          prezzo: item.prezzo,
+          tipo: item.tipo,
+          categoria: item.categoria,
+          calorie: item.calorie,
+          quantity: 1
+        };
+      }
+    }
+
+    var html = '';
+    for (var codice in groupedItems) {
+      var item = groupedItems[codice];
+      var price = calculatePrice(item);
+      var totalPrice = price * item.quantity;
+
+      html += '<div class="cart-item">';
+      html += '<div class="cart-item-info">';
+      html += '<div class="cart-item-name">' + item.descrizione + '</div>';
+      html += '<div class="cart-item-price">€' + totalPrice.toFixed(2) + '</div>';
+      html += '</div>';
+      html += '<div class="cart-item-controls">';
+      html += '<input type="number" class="quantity-input-cart" value="' + item.quantity + '" min="1" onchange="updateQuantity(' + item.codice + ', this.value)">';
+      html += '<button class="btn-small remove-btn" onclick="removeFromCart(' + item.codice + ')">×1</button>';
+      html += '<button class="btn-small remove-all-btn" onclick="removeAllFromCart(' + item.codice + ')">×All</button>';
+      html += '</div>';
+      html += '</div>';
+    }
+
+    cartItems.innerHTML = html;
+  }
+
+  function updateQuantity(codice, newQuantity) {
+    var quantity = parseInt(newQuantity);
+    if (quantity < 1) {
+      quantity = 1;
+    }
+
+    // Rimuovi tutti gli item con questo codice
+    cart = cart.filter(function(item) {
+      return item.codice !== codice;
+    });
+
+    // Aggiungi la nuova quantità
+    var product = null;
+    for (var i = 0; i < products.length; i++) {
+      if (products[i].codice === codice) {
+        product = products[i];
+        break;
+      }
+    }
+
+    if (product) {
+      addToCart(product, quantity);
+    }
+  }
+
+  function removeFromCart(codice) {
+    for (var i = 0; i < cart.length; i++) {
+      if (cart[i].codice === codice) {
+        cart.splice(i, 1);
+        break;
+      }
+    }
+    updateCartDisplay();
+    updateTotal();
+  }
+
+  function removeAllFromCart(codice) {
+    cart = cart.filter(function(item) {
+      return item.codice !== codice;
+    });
+    updateCartDisplay();
+    updateTotal();
+  }
+
+  function clearCart() {
+    cart = [];
+    updateCartDisplay();
+    updateTotal();
+    document.getElementById('receiptSection').style.display = 'none';
+  }
+
+  function updateTotal() {
+    var total = 0;
+    for (var i = 0; i < cart.length; i++) {
+      total += calculatePrice(cart[i]);
+    }
+    document.getElementById('totalAmount').textContent = '€' + total.toFixed(2);
+  }
+
+  function generateReceipt() {
+    if (cart.length === 0) {
+      alert('Il carrello è vuoto!');
+      return;
+    }
+
+    var receipt = '========== SCONTRINO ==========\n';
+    receipt += 'Supermercato: MegaMart\n';
+    receipt += 'Data: ' + new Date().toLocaleDateString('it-IT') + '\n';
+    receipt += 'Ora: ' + new Date().toLocaleTimeString('it-IT') + '\n';
+    receipt += '==============================\n\n';
+
+    var groupedItems = {};
+    for (var i = 0; i < cart.length; i++) {
+      var item = cart[i];
+      if (groupedItems[item.codice]) {
+        groupedItems[item.codice].quantity++;
+      } else {
+        groupedItems[item.codice] = {
+          codice: item.codice,
+          descrizione: item.descrizione,
+          prezzo: item.prezzo,
+          tipo: item.tipo,
+          categoria: item.categoria,
+          calorie: item.calorie,
+          quantity: 1
+        };
+      }
+    }
+
+    for (var codice in groupedItems) {
+      var item = groupedItems[codice];
+      var price = calculatePrice(item);
+      var totalItemPrice = price * item.quantity;
+
+      var paddedCode = ('000' + item.codice).slice(-3);
+      var paddedName = (item.descrizione + '                         ').slice(0, 25);
+      var paddedPrice = ('      ' + totalItemPrice.toFixed(2)).slice(-6);
+
+      receipt += paddedCode + ' ' + paddedName + ' €' + paddedPrice + '\n';
+
+      if (item.quantity > 1) {
+        receipt += '    ' + item.quantity + 'x €' + price.toFixed(2) + '\n';
+      }
+    }
+
+    var total = 0;
+    for (var i = 0; i < cart.length; i++) {
+      total += calculatePrice(cart[i]);
+    }
+
+    receipt += '\n==============================\n';
+    receipt += 'TOTALE: €' + total.toFixed(2) + '\n';
+    receipt += '==============================\n';
+    receipt += 'Grazie per la visita!';
+
+    document.getElementById('receiptContent').textContent = receipt;
+    document.getElementById('receiptSection').style.display = 'block';
+  }
+
+  function searchProducts() {
+    var searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    var category = document.getElementById('categoryFilter').value;
+
+    var filtered = [];
+    for (var i = 0; i < products.length; i++) {
+      var product = products[i];
+      var matchesSearch = product.descrizione.toLowerCase().indexOf(searchTerm) !== -1;
+      var matchesCategory = category === 'all' || product.categoria === category;
+
+      if (matchesSearch && matchesCategory) {
+        filtered.push(product);
+      }
+    }
+
+    displayProducts(filtered);
+  }
+
+  document.getElementById('searchInput').addEventListener('input', searchProducts);
+  document.getElementById('categoryFilter').addEventListener('change', searchProducts);
+
+  loadSampleData();
+</script>
+</body>
+</html>

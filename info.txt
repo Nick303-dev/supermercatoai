@@ -1,0 +1,20 @@
+per far funzionare il tutto devi mettere il file dentro xampp htdocs supermercato copia incolla
+questo
+
+<VirtualHost *:80>
+    ServerName supermercato.localhost
+    DocumentRoot "C:/xampp/htdocs/supermercato"
+    <Directory "C:/xampp/htdocs/supermercato">
+        Options Indexes FollowSymLinks MultiViews Includes ExecCGI
+        AllowOverride All
+        Require all granted
+    </Directory>
+    ErrorLog "logs/supermercato-error.log"
+    CustomLog "logs/supermercato-access.log" common
+</VirtualHost>
+
+in vhost.config C:\xampp\apache\conf\extra
+
+se non funziona ancora guarda questo video
+
+https://www.youtube.com/watch?v=gBfZdJFxjew

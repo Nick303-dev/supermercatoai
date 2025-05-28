@@ -1,247 +1,323 @@
-/*! HTML5 Boilerplate v9.0.1 | MIT License | https://html5boilerplate.com/ */
-
-/* main.css 3.0.0 | MIT License | https://github.com/h5bp/main.css#readme */
-/*
- * What follows is the result of much research on cross-browser styling.
- * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
- * Kroc Camen, and the H5BP dev community and team.
- */
-
-/* ==========================================================================
-   Base styles: opinionated defaults
-   ========================================================================== */
-
-html {
-  color: #222;
-  font-size: 1em;
-  line-height: 1.4;
-}
-
-/*
- * Remove text-shadow in selection highlight:
- * https://twitter.com/miketaylr/status/12228805301
- *
- * Customize the background color to match your design.
- */
-
-::-moz-selection {
-  background: #b3d4fc;
-  text-shadow: none;
-}
-
-::selection {
-  background: #b3d4fc;
-  text-shadow: none;
-}
-
-/*
- * A better looking default horizontal rule
- */
-
-hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #ccc;
-  margin: 1em 0;
-  padding: 0;
-}
-
-/*
- * Remove the gap between audio, canvas, iframes,
- * images, videos and the bottom of their containers:
- * https://github.com/h5bp/html5-boilerplate/issues/440
- */
-
-audio,
-canvas,
-iframe,
-img,
-svg,
-video {
-  vertical-align: middle;
-}
-
-/*
- * Remove default fieldset styles.
- */
-
-fieldset {
-  border: 0;
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-/*
- * Allow only vertical resizing of textareas.
- */
-
-textarea {
-  resize: vertical;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  padding: 20px;
 }
 
-/* ==========================================================================
-   Author's custom styles
-   ========================================================================== */
-
-/* ==========================================================================
-   Helper classes
-   ========================================================================== */
-
-/*
- * Hide visually and from screen readers
- */
-
-.hidden,
-[hidden] {
-  display: none !important;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-/*
- * Hide only visually, but have it available for screen readers:
- * https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
- *
- * 1. For long content, line feeds are not interpreted as spaces and small width
- *    causes content to wrap 1 word per line:
- *    https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
- */
-
-.visually-hidden {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-  /* 1 */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #4CAF50;
+  color: white;
+  border-radius: 5px;
 }
 
-/*
- * Extends the .visually-hidden class to allow the element
- * to be focusable when navigated to via the keyboard:
- * https://www.drupal.org/node/897638
- */
-
-.visually-hidden.focusable:active,
-.visually-hidden.focusable:focus {
-  clip: auto;
-  height: auto;
-  margin: 0;
-  overflow: visible;
-  position: static;
-  white-space: inherit;
-  width: auto;
+.header h1 {
+  margin-bottom: 10px;
 }
 
-/*
- * Hide visually and from screen readers, but maintain layout
- */
-
-.invisible {
-  visibility: hidden;
+.controlli {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 5px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-/*
- * Clearfix: contain floats
- *
- * The use of `table` rather than `block` is only necessary if using
- * `::before` to contain the top-margins of child elements.
- */
-
-.clearfix::before,
-.clearfix::after {
-  content: "";
-  display: table;
+.controlli input,
+.controlli select,
+.controlli button {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
 }
 
-.clearfix::after {
-  clear: both;
+.controlli button {
+  background: #4CAF50;
+  color: white;
+  cursor: pointer;
+  border: none;
 }
 
-/* ==========================================================================
-   EXAMPLE Media Queries for Responsive Design.
-   These examples override the primary ('mobile first') styles.
-   Modify as content requires.
-   ========================================================================== */
-
-@media only screen and (min-width: 35em) {
-  /* Style adjustments for viewports that meet the condition */
+.controlli button:hover {
+  background: #45a049;
 }
 
-@media print,
-  (-webkit-min-device-pixel-ratio: 1.25),
-  (min-resolution: 1.25dppx),
-  (min-resolution: 120dpi) {
-  /* Style adjustments for high resolution devices */
+.contenuto-principale {
+  display: flex;
+  gap: 20px;
 }
 
-/* ==========================================================================
-   Print styles.
-   Inlined to avoid the additional HTTP request:
-   https://www.phpied.com/delay-loading-your-print-css/
-   ========================================================================== */
+.sezione-prodotti {
+  flex: 2;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
 
-@media print {
-  *,
-  *::before,
-  *::after {
-    background: #fff !important;
-    color: #000 !important;
-    /* Black prints faster */
-    box-shadow: none !important;
-    text-shadow: none !important;
+.sezione-carrello {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.intestazione-sezione {
+  background: #333;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.griglia-prodotti {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  padding: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.scheda-prodotto {
+  border: 2px solid #eee;
+  padding: 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.scheda-prodotto:hover {
+  border-color: #4CAF50;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.scheda-prodotto.selezionato {
+  border-color: #4CAF50;
+  background: #f0f8f0;
+}
+
+.codice-prodotto {
+  background: #4CAF50;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  margin-bottom: 5px;
+  display: inline-block;
+}
+
+.nome-prodotto {
+  font-weight: bold;
+  margin-bottom: 8px;
+  min-height: 40px;
+}
+
+.prezzo-prodotto {
+  font-size: 18px;
+  color: #4CAF50;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.tipo-prodotto {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+  display: inline-block;
+}
+
+.calorie-prodotto {
+  background: #fff3e0;
+  color: #f57c00;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.elementi-carrello {
+  padding: 15px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.elemento-carrello {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 5px;
+}
+
+.info-elemento-carrello {
+  flex: 1;
+}
+
+.nome-elemento-carrello {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+.prezzo-elemento-carrello {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.controlli-elemento-carrello {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.input-quantita-carrello {
+  width: 50px;
+  text-align: center;
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.pulsante-piccolo {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.pulsante-rimuovi {
+  background: #f44336;
+  color: white;
+}
+
+.pulsante-rimuovi:hover {
+  background: #d32f2f;
+}
+
+.pulsante-rimuovi-tutto {
+  background: #ff9800;
+  color: white;
+}
+
+.pulsante-rimuovi-tutto:hover {
+  background: #f57c00;
+}
+
+.controlli-carrello {
+  padding: 15px;
+  border-top: 1px solid #eee;
+}
+
+.controllo-quantita {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.controllo-quantita input {
+  width: 60px;
+  text-align: center;
+}
+
+.pulsante-svuota-carrello {
+  width: 100%;
+  background: #f44336;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.pulsante-svuota-carrello:hover {
+  background: #d32f2f;
+}
+
+.sezione-totale {
+  background: #4CAF50;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+.importo-totale {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.pulsante-scontrino {
+  background: white;
+  color: #4CAF50;
+  border: 2px solid white;
+  padding: 10px 16px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.pulsante-scontrino:hover {
+  background: #f0f0f0;
+}
+
+.sezione-scontrino {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  display: none;
+}
+
+.contenuto-scontrino {
+  padding: 15px;
+  font-family: 'Courier New', monospace;
+  background: #f9f9f9;
+  white-space: pre-wrap;
+  max-height: 300px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+.stato-vuoto {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .contenuto-principale {
+    flex-direction: column;
   }
 
-  a,
-  a:visited {
-    text-decoration: underline;
+  .griglia-prodotti {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 
-  a[href]::after {
-    content: " (" attr(href) ")";
-  }
-
-  abbr[title]::after {
-    content: " (" attr(title) ")";
-  }
-
-  /*
-   * Don't show links that are fragment identifiers,
-   * or use the `javascript:` pseudo protocol
-   */
-  a[href^="#"]::after,
-  a[href^="javascript:"]::after {
-    content: "";
-  }
-
-  pre {
-    white-space: pre-wrap !important;
-  }
-
-  pre,
-  blockquote {
-    border: 1px solid #999;
-    page-break-inside: avoid;
-  }
-
-  tr,
-  img {
-    page-break-inside: avoid;
-  }
-
-  p,
-  h2,
-  h3 {
-    orphans: 3;
-    widows: 3;
-  }
-
-  h2,
-  h3 {
-    page-break-after: avoid;
+  .controlli {
+    flex-direction: column;
   }
 }
-
